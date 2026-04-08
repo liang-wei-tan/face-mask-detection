@@ -59,10 +59,6 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Download datasets from Kaggle and place them in the appropriate directories:
-   - Images go to: `face_mask_detection/images/`
-   - Annotations go to: `face_mask_detection/annotations/`
-
 ## Model Training & Evaluation
 
 (Add specific instructions for training and evaluation once implemented)
