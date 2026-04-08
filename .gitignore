@@ -1,0 +1,31 @@
+# Virtual environment
+venv/
+env/
+
+# Dataset (gitignored as per project setup)
+face_mask_detection/
+
+# Model weights
+*.pt
+*.h5
+*.onnx
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+.env
