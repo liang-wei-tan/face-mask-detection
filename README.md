@@ -82,8 +82,8 @@ This installs TensorFlow with compatible CUDA/cuDNN libraries for automatic GPU 
 
 4. Download dataset
 ```bash
-curl -L -o face-mask-detection.zip\
-  https://www.kaggle.com/api/v1/datasets/download/andrewmvd/face-mask-detection
+curl -L -o face-mask-12k-images-dataset.zip\
+  https://www.kaggle.com/api/v1/datasets/download/ashishjangra27/face-mask-12k-images-dataset
 
 unzip face-mask-12k-images-dataset.zip -d face-mask-12k-images-dataset/
 ```
