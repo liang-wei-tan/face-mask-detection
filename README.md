@@ -44,7 +44,7 @@ mask_detection/
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/liang-wei-tan/face-mask-detection
 cd mask_detection
 ```
 
