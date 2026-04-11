@@ -45,7 +45,7 @@ mask_detection/
 1. Clone the repository:
 ```bash
 git clone https://github.com/liang-wei-tan/face-mask-detection
-cd mask_detection
+cd face-mask-detection
 ```
 
 2. Create and activate virtual environment:
@@ -58,6 +58,15 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```bash
 pip install -r requirements.txt
 ```
+
+4. Download dataset
+```bash
+curl -L -o face-mask-detection.zip\
+  https://www.kaggle.com/api/v1/datasets/download/andrewmvd/face-mask-detection
+
+unzip face-mask-12k-images-dataset.zip -d face-mask-12k-images-dataset/
+```
+
 
 ## Model Training & Evaluation
 
