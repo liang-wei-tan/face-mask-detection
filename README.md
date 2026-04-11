@@ -59,6 +59,27 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+### GPU Setup (Optional - for CUDA/NVIDIA GPUs)
+
+If you have an NVIDIA GPU and want TensorFlow to use it:
+
+```bash
+pip uninstall tensorflow -y
+pip install tensorflow[and-cuda]
+```
+
+Verify GPU is detected:
+```bash
+python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+```
+
+You should see output like:
+```
+[PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+```
+
+This installs TensorFlow with compatible CUDA/cuDNN libraries for automatic GPU acceleration.
+
 4. Download dataset
 ```bash
 curl -L -o face-mask-detection.zip\
