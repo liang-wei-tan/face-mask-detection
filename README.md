@@ -25,8 +25,18 @@ This project leverages two Kaggle datasets for training and evaluation:
 mask_detection/
 ├── README.md              # This file
 ├── requirements.txt       # Python dependencies
+├── Dockerfile             # Docker configuration for RunPod
 ├── CLAUDE.md             # Project guidelines
 ├── .gitignore            # Git ignore rules
+├── models/               # Model definitions
+│   ├── __init__.py
+│   └── baseline_cnn.py
+├── train/                # Training pipeline
+│   ├── __init__.py
+│   ├── __main__.py       # CLI entry point
+│   ├── utils.py          # Data loading utilities
+│   └── trainer.py        # Training functions
+├── checkpoints/          # Model checkpoints (generated during training, gitignored)
 ├── venv/                 # Virtual environment (ignored)
 └── face_mask_detection/  # Dataset directory (ignored)
     ├── images/           # Training/validation images
@@ -80,6 +90,29 @@ You should see output like:
 
 This installs TensorFlow with compatible CUDA/cuDNN libraries for automatic GPU acceleration.
 
+### Docker Setup (Optional - for containerized deployment)
+
+A Dockerfile is provided for containerized deployment (e.g., on RunPod).
+
+**Building the Docker image for RunPod (linux/amd64):**
+
+```bash
+# For Apple Silicon/Intel Macs - build for linux/amd64 architecture and push to Docker Hub
+docker buildx build --platform linux/amd64 -t tanliangwei/face-mask-detection:latest --push .
+```
+
+**Prerequisites for building:**
+- Docker Desktop installed
+- Logged in to Docker Hub: `docker login`
+- `docker buildx` available (usually built-in; if not, run `docker buildx create --use`)
+
+**Note:** Building for `linux/amd64` on Mac takes longer (5-10 minutes) as it runs on a remote builder, but ensures compatibility with RunPod servers.
+
+**Using on RunPod:**
+- Use image: `docker.io/tanliangwei/face-mask-detection:latest`
+- Ports: 8888 (JupyterLab)
+- GPU support: Automatic (CUDA/cuDNN included in base image)
+
 4. Download dataset
 ```bash
 curl -L -o face-mask-12k-images-dataset.zip\
@@ -91,7 +124,70 @@ unzip face-mask-12k-images-dataset.zip -d face-mask-12k-images-dataset/
 
 ## Model Training & Evaluation
 
-(Add specific instructions for training and evaluation once implemented)
+### Training the Model
+
+**From command line:**
+
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Run training with default settings (10 epochs)
+python -m train "face-mask-12k-images-dataset/Face Mask Dataset"
+
+# Run training with custom epochs
+python -m train "face-mask-12k-images-dataset/Face Mask Dataset" 20
+```
+
+**From Jupyter notebook:**
+
+```python
+from models import create_baseline_cnn
+from train.utils import load_datasets, optimize_datasets
+from train.trainer import train_model, evaluate_model
+
+# Load datasets
+data_dir = "face-mask-12k-images-dataset/Face Mask Dataset"
+train_ds, val_ds, test_ds, class_names = load_datasets(data_dir)
+
+# Optimize for training
+train_ds, val_ds, test_ds = optimize_datasets(train_ds, val_ds, test_ds)
+
+# Create model and checkpoint callback
+model, checkpoint_callback = create_baseline_cnn(num_classes=len(class_names))
+
+# Train
+history = train_model(model, train_ds, val_ds, callbacks=[checkpoint_callback], epochs=10)
+
+# Evaluate
+loss, accuracy = evaluate_model(model, test_ds)
+```
+
+### Checkpoints
+
+Model checkpoints are automatically saved during training to:
+```
+checkpoints/baseline_cnn/model-{epoch:02d}-{val_loss:.4f}.h5
+```
+
+Example:
+```
+checkpoints/baseline_cnn/
+├── model-01-0.5234.h5
+├── model-02-0.4821.h5
+├── model-03-0.4612.h5
+└── ...
+```
+
+Each file is saved after every epoch, named with the epoch number and validation loss.
+
+**Loading a checkpoint:**
+
+```python
+import tensorflow as tf
+
+model = tf.keras.models.load_model("checkpoints/baseline_cnn/model-05-0.4612.h5")
+```
 
 ## Classes
 
@@ -102,8 +198,10 @@ unzip face-mask-12k-images-dataset.zip -d face-mask-12k-images-dataset/
 ## Notes
 
 - Model weights (`.pt`, `.h5`, `.onnx`) are gitignored
+- Checkpoint files in `checkpoints/` are gitignored
 - The `face_mask_detection/` directory containing raw data is gitignored
 - Python virtual environment is gitignored
+- Docker image must be built with `--platform linux/amd64` for RunPod compatibility (not just `docker build` on Mac)
 
 ## License
 

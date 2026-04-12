@@ -7,10 +7,11 @@ face_mask_detection/
 *.zip
 face-mask-12k-images-dataset/
 
-# Model weights
+# Model weights and checkpoints
 *.pt
 *.h5
 *.onnx
+checkpoints/
 
 # Python cache
 __pycache__/
