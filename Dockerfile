@@ -19,6 +19,3 @@ RUN pip install --upgrade pip && \
 
 # Expose Jupyter port
 EXPOSE 8888
-
-# Start JupyterLab
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--ServerApp.token=''", "--ServerApp.password=''"]
