@@ -33,5 +33,5 @@ RUN pip install jupyterlab
 # Expose Jupyter port
 EXPOSE 8888
 
-# Default command - start bash (user can run jupyter manually or via RunPod)
-CMD ["bash"]
+# Start JupyterLab on container startup
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
