@@ -16,6 +16,3 @@ RUN git clone https://github.com/liang-wei-tan/face-mask-detection.git /workspac
 # Install Python dependencies (tensorflow already installed in base image)
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
-
-# Expose Jupyter port
-EXPOSE 8888
