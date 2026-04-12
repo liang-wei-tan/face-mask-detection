@@ -4,8 +4,9 @@ CLI entry point for training. Run with: python -m train [data_dir] [epochs]
 
 import sys
 from models import create_baseline_cnn
-from train.utils import load_datasets, optimize_datasets
-from train.trainer import train_model
+from .utils import load_datasets, optimize_datasets
+from .trainer import train_model
+from .evaluate import evaluate_model
 
 # Configuration
 EPOCHS = 10
@@ -31,10 +32,12 @@ def main(data_dir, epochs=EPOCHS):
     model.summary()
 
     print("Training model...")
-
     history = train_model(
         model, train_ds, val_ds, callbacks=[checkpoint_callback], epochs=epochs
     )
+    
+    print("Evaluating model on test set...")
+    evaluate_model(model, test_ds)
 
     return model, history
 
