@@ -1,6 +1,7 @@
 """
 CLI entry point for training. Run with: python -m train [data_dir] [epochs]
 """
+
 import sys
 from models import create_baseline_cnn
 from train.utils import load_datasets, optimize_datasets
@@ -26,11 +27,14 @@ def main(data_dir, epochs=EPOCHS):
     train_ds, val_ds, test_ds = optimize_datasets(train_ds, val_ds, test_ds)
 
     print("Creating model...")
-    model = create_baseline_cnn(num_classes=len(class_names))
+    model, checkpoint_callback = create_baseline_cnn(num_classes=len(class_names))
     model.summary()
 
     print("Training model...")
-    history = train_model(model, train_ds, val_ds, epochs=epochs)
+
+    history = train_model(
+        model, train_ds, val_ds, callbacks=[checkpoint_callback], epochs=epochs
+    )
 
     return model, history
 

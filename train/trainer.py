@@ -6,7 +6,7 @@ from train.utils import load_datasets, optimize_datasets
 EPOCHS = 10
 
 
-def train_model(model, train_ds, val_ds, epochs=EPOCHS):
+def train_model(model, train_ds, val_ds, callbacks, epochs=EPOCHS):
     """
     Train the model.
 
@@ -22,7 +22,8 @@ def train_model(model, train_ds, val_ds, epochs=EPOCHS):
     history = model.fit(
         train_ds,
         validation_data=val_ds,
-        epochs=epochs
+        epochs=epochs,
+        callbacks=callbacks,
     )
     return history
 
