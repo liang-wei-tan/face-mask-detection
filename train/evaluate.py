@@ -5,6 +5,59 @@ import os
 import glob
 from .utils import load_datasets
 
+def error_analysis(checkpoint_dir="checkpoints/baseline_cnn", data_dir="face-mask-12k-images-dataset/Face Mask Dataset"):
+  print(f"Loading dataset from {data_dir}...")
+  _, _, test_ds, class_names = load_datasets(data_dir)
+
+  print("Finding latest checkpoint...")
+  latest_checkpoint = get_latest_checkpoint(checkpoint_dir)
+  print(f"Loading model from: {latest_checkpoint}")
+
+  model = tf.keras.models.load_model(latest_checkpoint)
+  _, _, test_ds, class_names = load_datasets(data_dir)
+  test_batches = list(test_ds.as_numpy_iterator())
+  test_predictions = []
+
+  for batch in test_batches:
+    batch_image, batch_label = batch[0], batch[1]
+    p = model.predict(batch_image)
+    test_predictions.append(p)
+  
+  incorrect_img_tmp = []
+  incorrect_label_tmp = []
+  incorrect_predictions_tmp = []
+
+  for i in range(0, len(test_batches)):
+    batch = test_batches[i]
+    predictions = test_predictions[i]
+    batch_img, batch_labels = batch[0], batch[1]
+    p_temp = np.argmax(predictions, axis = 1)
+    correctness = p_temp == batch_labels
+    incorrect_data = correctness == False
+    if len(batch_img[incorrect_data]) > 0:
+      print('some incorrect_data, appending')
+      incorrect_img_tmp.append(batch_img[incorrect_data])
+      incorrect_label_tmp.append(batch_labels[incorrect_data])
+      incorrect_predictions_tmp.append(predictions[incorrect_data])
+  incorrect_img = np.concatenate(incorrect_img_tmp)
+  incorrect_label = np.concatenate(incorrect_label_tmp)
+  incorrect_predictions = np.concatenate(incorrect_predictions_tmp)
+  num_rows = 30
+  num_cols = 2
+  num_images = num_rows*num_cols
+  plt.figure(figsize=(2*2*num_cols, 2*num_rows))
+  for i in range(num_images):
+    if i >= len(incorrect_predictions):
+      break
+    plt.subplot(num_rows, 2*num_cols, 2*i+1)
+    plot_image(i, incorrect_predictions[i], incorrect_label, incorrect_img, class_names)
+    plt.subplot(num_rows, 2*num_cols, 2*i+2)
+    plot_value_array(i, incorrect_predictions[i], incorrect_label)
+  plt.tight_layout()
+  plt.show()
+
+
+
 def evaluate_model(model, test_ds, class_names=None):
     """
     Evaluate model on test dataset.
