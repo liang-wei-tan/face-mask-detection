@@ -17,7 +17,7 @@ from .trainer import train_model
 from .evaluate import evaluate_model
 
 # Configuration
-EPOCHS = 10
+EPOCHS = 20
 DEFAULT_MODEL = "baseline_cnn"
 DEFAULT_DATA_DIR = "face-mask-12k-images-dataset/Face Mask Dataset"
 
