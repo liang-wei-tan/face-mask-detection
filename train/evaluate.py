@@ -14,13 +14,14 @@ def error_analysis(checkpoint_dir="checkpoints/baseline_cnn", data_dir="face-mas
   print(f"Loading model from: {latest_checkpoint}")
 
   model = tf.keras.models.load_model(latest_checkpoint)
+  probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
   _, _, test_ds, class_names = load_datasets(data_dir)
   test_batches = list(test_ds.as_numpy_iterator())
   test_predictions = []
 
   for batch in test_batches:
     batch_image, batch_label = batch[0], batch[1]
-    p = model.predict(batch_image)
+    p = probability_model.predict(batch_image)
     test_predictions.append(p)
   
   incorrect_img_tmp = []
@@ -192,6 +193,8 @@ if __name__ == "__main__":
   data_dir = "face-mask-12k-images-dataset/Face Mask Dataset"
   if len(sys.argv) > 1:
     data_dir = sys.argv[1]
+  if len(sys.argv) > 2:
+    checkpoint_dir = sys.argv[2]
 
   model, loss, accuracy = main(data_dir)
 
