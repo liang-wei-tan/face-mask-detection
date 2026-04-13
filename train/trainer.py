@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 # Configuration
-EPOCHS = 10
+EPOCHS = 20
 
 
 def train_model(model, train_ds, val_ds, callbacks, epochs=EPOCHS):

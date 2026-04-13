@@ -2,7 +2,7 @@ import os
 import tensorflow as tf
 
 INPUT_DIM = (None, 128, 128, 3)
-CHECKPOINT_DIR = "checkpoints/baseline_cnn"
+CHECKPOINT_DIR = "checkpoints/baseline_cnn_64"
 
 
 def _get_checkpoint_callback():
@@ -31,11 +31,11 @@ def create_baseline_cnn(num_classes=2):
     model = tf.keras.Sequential(
         [
             tf.keras.layers.Rescaling(1.0 / 255),
-            tf.keras.layers.Conv2D(32, 3, activation="relu"),
+            tf.keras.layers.Conv2D(64, 3, activation="relu"),
             tf.keras.layers.MaxPooling2D(),
-            tf.keras.layers.Conv2D(32, 3, activation="relu"),
+            tf.keras.layers.Conv2D(64, 3, activation="relu"),
             tf.keras.layers.MaxPooling2D(),
-            tf.keras.layers.Conv2D(32, 3, activation="relu"),
+            tf.keras.layers.Conv2D(64, 3, activation="relu"),
             tf.keras.layers.MaxPooling2D(),
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(256, activation="relu"),
