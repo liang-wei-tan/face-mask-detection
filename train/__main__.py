@@ -51,7 +51,7 @@ def main(model_name, data_dir, epochs=EPOCHS):
     )
 
     print("Evaluating model on test set...")
-    evaluate_model(model, test_ds)
+    evaluate_model(model, test_ds, class_names=class_names)
 
     return model, history
 

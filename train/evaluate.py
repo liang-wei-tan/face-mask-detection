@@ -5,13 +5,14 @@ import os
 import glob
 from .utils import load_datasets
 
-def evaluate_model(model, test_ds):
+def evaluate_model(model, test_ds, class_names=None):
     """
     Evaluate model on test dataset.
 
     Args:
         model: Keras model to evaluate
         test_ds: Test dataset
+        class_names: List of class names (optional, for visualization)
 
     Returns:
         Tuple of (loss, accuracy)
@@ -19,33 +20,33 @@ def evaluate_model(model, test_ds):
     loss, accuracy = model.evaluate(test_ds)
     print(f"Test Loss: {loss:.4f}")
     print(f"Test Accuracy: {accuracy:.4f}")
-    
-    class_names = test_ds.class_names
-    print(class_names)
-    
-    # Create a probability model for inference
-    probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-    
-    temp_ds = test_ds.take(1)
-    sample = list(temp_ds.as_numpy_iterator())[0]
 
-    test_images = sample[0]
-    test_labels = sample[1]
-    
-    predictions = probability_model.predict(test_images)
-    
-    num_rows = 5
-    num_cols = 3
-    num_images = num_rows*num_cols
-    plt.figure(figsize=(2*2*num_cols, 2*num_rows))
-    for i in range(num_images):
-        plt.subplot(num_rows, 2*num_cols, 2*i+1)
-        plot_image(i, predictions[i], test_labels, test_images, class_names=class_names)
-        plt.subplot(num_rows, 2*num_cols, 2*i+2)
-        plot_value_array(i, predictions[i], test_labels)
-    plt.tight_layout()
-    plt.show()
-    
+    if class_names:
+        print(class_names)
+
+        # Create a probability model for inference
+        probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+
+        temp_ds = test_ds.take(1)
+        sample = list(temp_ds.as_numpy_iterator())[0]
+
+        test_images = sample[0]
+        test_labels = sample[1]
+
+        predictions = probability_model.predict(test_images)
+
+        num_rows = 5
+        num_cols = 3
+        num_images = num_rows * num_cols
+        plt.figure(figsize=(2 * 2 * num_cols, 2 * num_rows))
+        for i in range(num_images):
+            plt.subplot(num_rows, 2 * num_cols, 2 * i + 1)
+            plot_image(i, predictions[i], test_labels, test_images, class_names=class_names)
+            plt.subplot(num_rows, 2 * num_cols, 2 * i + 2)
+            plot_value_array(i, predictions[i], test_labels)
+        plt.tight_layout()
+        plt.show()
+
     return loss, accuracy
 
 
@@ -118,7 +119,7 @@ def main(data_dir, checkpoint_dir="checkpoints/baseline_cnn"):
       checkpoint_dir: Path to checkpoint directory
   """
   print(f"Loading dataset from {data_dir}...")
-  _, _, test_ds, _ = load_datasets(data_dir)
+  _, _, test_ds, class_names = load_datasets(data_dir)
 
   print("Finding latest checkpoint...")
   latest_checkpoint = get_latest_checkpoint(checkpoint_dir)
@@ -127,7 +128,7 @@ def main(data_dir, checkpoint_dir="checkpoints/baseline_cnn"):
   model = tf.keras.models.load_model(latest_checkpoint)
 
   print("\nEvaluating model...")
-  loss, accuracy = evaluate_model(model, test_ds)
+  loss, accuracy = evaluate_model(model, test_ds, class_names=class_names)
 
   return model, loss, accuracy
 
