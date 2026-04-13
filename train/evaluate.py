@@ -154,8 +154,10 @@ def get_latest_checkpoint(checkpoint_dir="checkpoints/baseline_cnn"):
     raise FileNotFoundError(f"Checkpoint directory not found: {checkpoint_dir}")
 
   # Find all .h5 files
-  checkpoint_files = glob.glob(os.path.join(checkpoint_dir, "*.h5"))
+  checkpoint_files = glob.glob(os.path.join(checkpoint_dir, "*.keras"))
+  checkpoint_files = checkpoint_files + glob.glob(os.path.join(checkpoint_dir, "*.h5")) 
 
+  # print(f"Found checkpoint files: {checkpoint_files}" )
   if not checkpoint_files:
     raise FileNotFoundError(f"No checkpoint files found in {checkpoint_dir}")
 
