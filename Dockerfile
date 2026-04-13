@@ -10,9 +10,17 @@ RUN apt-get update && apt-get install -y \
     openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
+# Configure SSH
+RUN mkdir -p /run/sshd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+
 # Clone repository
 RUN git clone https://github.com/liang-wei-tan/face-mask-detection.git /workspace
 
 # Install Python dependencies (tensorflow already installed in base image)
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
+
+# Start SSH and JupyterLab
+CMD service ssh start && jupyter lab --ip=0.0.0.0 --allow-root --no-browser
