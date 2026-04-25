@@ -17,4 +17,4 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 # Start JupyterLab
-CMD jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser"]
