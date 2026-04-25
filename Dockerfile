@@ -2,12 +2,13 @@ FROM tensorflow/tensorflow:2.14.0-gpu-jupyter
 
 WORKDIR /workspace
 
-# Install additional system dependencies including SSH
+# Install additional system dependencies including SSH and nginx
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     wget \
     openssh-server \
+    nginx \
     && rm -rf /var/lib/apt/lists/*
 
 # Remove SSH host keys so RunPod can generate them at startup
