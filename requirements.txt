@@ -13,3 +13,4 @@ pillow
 tqdm
 requests
 pyyaml
+keras-hub==0.21.1

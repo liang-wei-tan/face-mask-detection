@@ -2,7 +2,7 @@ from models.baseline_cnn import create_baseline_cnn as _create_baseline_cnn
 from models.baseline_cnn_64 import create_baseline_cnn as _create_baseline_cnn_64
 from models.transfer_inception import create_transfer_inception as _create_transfer_inception
 from models.transfer_inception_unfrozen import create_transfer_inception_unfrozen as _create_transfer_inception_unfrozen
-from models.transfer_inception_unfrozen import create_transfer_dino_v2 as _create_transfer_dino_v2
+from models.transfer_dino_v2 import create_transfer_dino_v2 as _create_transfer_dino_v2
 
 # Model registry
 MODELS = {
