@@ -13,7 +13,7 @@ def error_analysis(checkpoint_dir="checkpoints/baseline_cnn", data_dir="face-mas
   latest_checkpoint = get_latest_checkpoint(checkpoint_dir)
   print(f"Loading model from: {latest_checkpoint}")
 
-  model = tf.keras.models.load_model(latest_checkpoint)
+  model = tf.keras.models.load_model(latest_checkpoint, safe_mode=False)
   probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
   _, _, test_ds, class_names = load_datasets(data_dir)
   test_batches = list(test_ds.as_numpy_iterator())
@@ -40,9 +40,23 @@ def error_analysis(checkpoint_dir="checkpoints/baseline_cnn", data_dir="face-mas
       incorrect_img_tmp.append(batch_img[incorrect_data])
       incorrect_label_tmp.append(batch_labels[incorrect_data])
       incorrect_predictions_tmp.append(predictions[incorrect_data])
-  incorrect_img = np.concatenate(incorrect_img_tmp)
-  incorrect_label = np.concatenate(incorrect_label_tmp)
-  incorrect_predictions = np.concatenate(incorrect_predictions_tmp)
+  if len(incorrect_img_tmp) != 0:
+    incorrect_img = np.concatenate(incorrect_img_tmp)
+    incorrect_img.shape
+  else:
+      incorrect_img = []
+
+  if len(incorrect_predictions_tmp) != 0:
+      incorrect_predictions = np.concatenate(incorrect_predictions_tmp)
+      incorrect_predictions.shape
+  else:
+      incorrect_predictions = []
+
+  if len(incorrect_label_tmp) != 0:
+      incorrect_label = np.concatenate(incorrect_label_tmp)
+      incorrect_label.shape
+  else:
+      incorrect_label_tmp = []
   num_rows = 30
   num_cols = 2
   num_images = num_rows*num_cols
@@ -181,7 +195,7 @@ def main(data_dir, checkpoint_dir="checkpoints/baseline_cnn"):
   latest_checkpoint = get_latest_checkpoint(checkpoint_dir)
   print(f"Loading model from: {latest_checkpoint}")
 
-  model = tf.keras.models.load_model(latest_checkpoint)
+  model = tf.keras.models.load_model(latest_checkpoint, safe_mode=False)  # safe_mode=False to allow loading custom layers if needed
 
   print("\nEvaluating model...")
   loss, accuracy = evaluate_model(model, test_ds, class_names=class_names)

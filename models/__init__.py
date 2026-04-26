@@ -3,6 +3,7 @@ from models.baseline_cnn_64 import create_baseline_cnn as _create_baseline_cnn_6
 from models.transfer_inception import create_transfer_inception as _create_transfer_inception
 from models.transfer_inception_unfrozen import create_transfer_inception_unfrozen as _create_transfer_inception_unfrozen
 from models.transfer_dino_v2 import create_transfer_dino_v2 as _create_transfer_dino_v2
+from models.transfer_dino_v2_unfrozen import create_transfer_dino_v2_unfrozen as _create_transfer_dino_v2_unfrozen
 
 # Model registry
 MODELS = {
@@ -11,6 +12,7 @@ MODELS = {
     "transfer_inception": _create_transfer_inception,
     "transfer_inception_unfrozen": _create_transfer_inception_unfrozen,
     "transfer_dino_v2": _create_transfer_dino_v2, 
+    "transfer_dino_v2_unfrozen": _create_transfer_dino_v2_unfrozen, 
 }
 
 __all__ = ["MODELS", "get_model"]
