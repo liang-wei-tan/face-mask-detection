@@ -1,12 +1,14 @@
 from models.baseline_cnn import create_baseline_cnn as _create_baseline_cnn
 from models.baseline_cnn_64 import create_baseline_cnn as _create_baseline_cnn_64
 from models.transfer_inception import create_transfer_inception as _create_transfer_inception
+from models.transfer_inception_unfrozen import create_transfer_inception_unfrozen as _create_transfer_inception_unfrozen
 
 # Model registry
 MODELS = {
     "baseline_cnn": _create_baseline_cnn,
     "baseline_cnn_64": _create_baseline_cnn_64,
     "transfer_inception": _create_transfer_inception,
+    "transfer_inception_unfrozen": _create_transfer_inception_unfrozen,
 }
 
 __all__ = ["MODELS", "get_model"]
