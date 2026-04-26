@@ -1,26 +1,15 @@
-# Core ML/DL
-tensorflow>=2.13.0
+# Upgrade TensorFlow to support NumPy 2.x
+tensorflow[and-cuda]
+
+# Additional packages not in base image
 opencv-python
-numpy
 pandas
 matplotlib
 scikit-learn
 scipy
-
-# Data handling
 tensorflow-datasets
-
-# Jupyter/Interactive
-jupyter
-ipython
-ipykernel
-ipywidgets
-
-# Visualization & analysis
 seaborn
 pillow
-
-# Utilities
 tqdm
 requests
 pyyaml

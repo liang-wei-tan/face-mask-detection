@@ -91,6 +91,11 @@ execute_script "/pre_start.sh" "Running pre-start script..."
 
 echo "Pod Started"
 
+# Clone repository if not already present
+if [ ! -d /workspace/face-mask-detection ]; then
+    git clone https://github.com/liang-wei-tan/face-mask-detection.git /workspace/face-mask-detection
+fi
+
 setup_ssh
 start_jupyter
 export_env_vars

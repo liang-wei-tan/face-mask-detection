@@ -14,9 +14,6 @@ RUN apt-get update && apt-get install -y \
 # Remove SSH host keys so RunPod can generate them at startup
 RUN rm -f /etc/ssh/ssh_host_*
 
-# Clone repository
-RUN git clone https://github.com/liang-wei-tan/face-mask-detection.git /workspace
-
 # Install Python dependencies (tensorflow already installed in base image)
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
